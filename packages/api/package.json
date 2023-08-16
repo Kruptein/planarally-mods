@@ -1,0 +1,19 @@
+{
+    "name": "@planarally/mod-api",
+    "version": "1.0.0",
+    "description": "The PA mod API.",
+    "module": "./dist/pa-api.es.js",
+    "types": "./dist/main",
+    "keywords": [],
+    "author": "Darragh <info@darragh.dev>",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "build-api": "tsc --noEmit && vite build"
+    },
+    "devDependencies": {
+        "vite": "^4.4.9",
+        "vite-plugin-dts": "^3.5.2",
+        "vue": "^3.3.4"
+    }
+}
