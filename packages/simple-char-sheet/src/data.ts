@@ -1,10 +1,19 @@
-import { shallowReactive } from "vue";
-
-import type { DataBlock } from "@planarally/mod-api";
-import { api } from "./main";
-
 // DataBlocks are the way PA offers database side storage for mods
-// A DataBlock consists of a modId, a name unique to the mod and some data
+
+// Datablocks come in 3 different types (see later), have a name and some data
+// The name can be any string, as long as there is no other DataBlock of the same type with the same name in your mod.
+// Behind the scenes PA will also tag DataBlocks with the mod's id.
+
+// The 3 different types of datablocks are: User, Room, Shape.
+// A datablock thus is always related to a specific instance of one of these.
+// UserDataBlocks are relevant for storing mod settings for a specific user,
+// whereas RoomDataBlocks are useful for storing mod information that is about a Room in general.
+// (a "Room" is what PA internally uses to refer to the totality of a campaign, it's the container for all locations etc)
+// In this mod we're storing data per character and characters have a 1on1 relationship with shapes,
+// so we'll be using ShapeDataBlocks.
+// This also means that when the relevant resource (user,room,shape) is removed,
+// all related dataBlocks are also immediately cleaned up.
+
 // The DataBlock data is stored as a flat string on the server
 // This is the result of calling `JSON.stringify` on your data
 // Because this operation is not guaranteed to retain all data (e.g. Set/Map lose their data),
@@ -12,21 +21,25 @@ import { api } from "./main";
 // This means that in the database we store the result of `JSON.stringify(serialize(realData))`
 // And when loading a DataBlock we do `deserialize(JSON.parse(stringData))`
 
-// There are 3 different types of datablocks: User, Room, Shape.
-// A datablock thus is always related to a specific instance of one of these.
-// UserDataBlocks are relevant for storing mod settings for a specific user,
-// whereas RoomDataBlocks are useful for storing mod information that is about a Room in general.
-// In this mod we're storing data per character and characters have a 1on1 relationship with shapes,
-// so we'll be using ShapeDataBlocks.
-// This also means that when the relevant resource (user,room,shape) is removed,
-// all related dataBlocks are also immediately cleaned up.
+// A datablock's data will be accessible simply by accessing the `.data` property of the datablock.
+// It should be noted that this is fully mutable, it's up to you to ensure that data changes are tracked properly,
+// and persisted to the server when needed. (by an explicit call to `sync()`)
 
-// First we define some data structures that are used in the DataBlock itself,
-// We choose to not make the dataBlock's content itself reactive here.
-// In our current version of this character sheet, there is no interaction with other PA elements,
-// this means that the only moment our data is visible is when we open the new tab we made.
-// So keeping track of things reactively in advance is pretty wasteful.
-// Instead we wrap the relevant data in reactivity when we open the character sheet.
+// A DataBlock can be loaded by multiple users at once (e.g. the DM and the player looking at the same character),
+// When a sync to the server happens, all other clients that have the dataBlock loaded will be immediately updated.
+//
+// Additionally, a local client can choose to have the DataBlock's data be tracked reactively.
+// This is a Vue concept, and basically allows someone to react to changes in the data without registering callbacks.
+// The reactivity of a datablock is entirely opt-in, it's available under the `reactiveData` property,
+// which will only start tracking the data reactively once you access it.
+// Do note that the `useDataBlock` hook will use this automatically. (this will be used in the `CharTab.vue` component)
+// Another warning is that if you do use the reactiveData property,
+// you should be aware that mutation of the data should (almost) always happen on the reactiveData property and not on the `data` property.
+// This is because reactiveData is a proxy around the actual data, and will not detect the changes made to the data directly.
+
+// All that aside, let's define the data structure we'll be storing in the DataBlock.
+// we're not actually loading any datablocks directly ourselves, we could do this if we needed it in multiple locations in our mod,
+// but right now we only need it in once place (in the char sheet tab).
 
 interface Stat<T extends string, V> {
     name: string;
@@ -39,41 +52,4 @@ export type StringStat = Stat<"string", string>;
 export type CheckStat = Stat<"check", boolean>;
 export type StatType = NumberStat | StringStat | CheckStat;
 
-export type CharData = {
-    data: StatType[];
-};
-
-// We cache the DataBlocks we've already requested from PA.
-// Once loaded a DataBlock is always immediately available on the PA side without a server round-trip,
-// but by caching it ourselves, we can make some logic tighter and don't require async
-// which we would need for the PA calls as they don't make any assumption about availability
-//
-// Because our CharTab.vue is interested in which characters have been loaded so far
-// we're making this Map reactive. We however don't want all the DataBlocks to also become reactive
-// which is why we're wrapping the map in a `shallowReactive` to only track map changes reactively but nothing deeper
-
-export const loadedDataBlocks = shallowReactive(new Map<number, DataBlock<CharData>>());
-
-export async function loadDataBlock(char: number): Promise<void> {
-    if (loadedDataBlocks.has(char)) return;
-    const shape = api.systems.characters.getShape(char);
-    if (shape === undefined) return;
-    const shapeId = api.getGlobalId(shape.id);
-    if (shapeId === undefined) return;
-    // Here we're requesting the datablock for this mod and the active character from PA
-    // This call is a simplification of multiple separate calls,
-    // It will get the datablock if it already exists at the PA side on the client,
-    // It will load the datablock from the server if it exists on the server
-    // It will create a new datablock if the particular datablock does not yet exist on the server
-    // In the latter case, we provide a function to setup the block's initial data
-    const db = await api.getOrLoadDataBlock(
-        { category: "shape", name: "data", shape: shapeId },
-        {}, // We don't need a (de)serializer for this mod, as we're only dealing with JSON safe types
-        {
-            defaultData: () => ({
-                data: [],
-            }),
-        },
-    );
-    if (db) loadedDataBlocks.set(char, db);
-}
+export type CharData = StatType[];

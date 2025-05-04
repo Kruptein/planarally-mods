@@ -4,13 +4,15 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "zip": "node scripts/zip-mod.js"
     },
     "keywords": [],
     "author": "Darragh <info@darragh.dev>",
     "license": "MIT",
+    "type": "module",
     "devDependencies": {
-        "@tsconfig/node18": "^18.2.0",
-        "typescript": "^5.1.6"
+        "@tsconfig/node22": "^22.0.1",
+        "typescript": "^5.8.2",
+        "archiver": "^6.0.1"
     }
 }

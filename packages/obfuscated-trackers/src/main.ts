@@ -1,43 +1,49 @@
-import type { GameApi } from "@planarally/mod-api";
+import type { GameApi, ModEvents } from "@planarally/mod-api";
 
 import TrackerSettings from "./TrackerSettings.vue";
-import { watch } from "vue";
-import { loadDataBlock } from "./data";
 import { preTrackerUpdate } from "./handlers";
-export { preTrackerUpdate };
+import { watch } from "vue";
+import { charSerializer, getRepr } from "./data";
+
+// The simple-character-sheet mod has extensive comments for most functions,
+// those won't be repeated here, only things that are new or different will be explained.
 
 export let api: GameApi;
 
-// This function is called when mods are enabled.
-// This usually happens shortly after opening a PA website on any page (e.g. game, dashboard, ...)
-// This allows some initial setup for your mod if it needs it
-export async function init(): Promise<void> {
-    // We're just verifying if the mod loaded correctly :)
-    console.log("Loading Obfuscated Trackers");
-}
-
-// This is called when a game session is opened and provides access to most internal PA API's
-// This is called very shortly after the initial setup and thus not everything might be fully initialized yet.
-// For specific things you need, you might want to wait for a certain event to happen, or the more likely approach
-// to wait for the current location to be loaded
-export async function initGame(gameApi: GameApi): Promise<void> {
-    // Many parts of our mod will want to interact with the PA API
-    // How we offer this interface to other parts of the mod is up to you
-    // In this simple example we're just globally setting it somewhere
+async function initGame(gameApi: GameApi): Promise<void> {
     api = gameApi;
 
-    // Our mod needs some configuration per tracker, so we register the relevant UI component.
-    api.ui.shape.registerTrackerSettings(TrackerSettings, "Obfuscated Trackers");
+    api.ui.shape.registerTab(
+        {
+            id: "obfuscated-trackers",
+            label: "Obfuscated",
+            component: TrackerSettings,
+        },
+        // We only want to show the tab if the user has edit access to the shape
+        (shapeId, hasEditAccess) => {
+            return hasEditAccess;
+        },
+    );
 
-    // Lastly, we actively monitor the currently selected shape
-    // When a shape is selected, we already fetch potential datablocks associated with that shape and our mod
-    // so that they're ready when we open the tracker settings
+    // We need to ensure that the data block is loaded when the shape is selected regardless of whether our custom mod tab is open
+    // This is to ensure that modifications to the tracker actually are handled by the time our tracker handler is called
     watch(
         () => api.systemsState.selected.reactive.focus,
-        async (focus) => {
-            if (focus !== undefined) {
-                await loadDataBlock(focus);
+        async (shapeId) => {
+            if (shapeId) {
+                const globalId = api.getGlobalId(shapeId);
+                if (globalId === undefined) return;
+
+                await api.getOrLoadDataBlock(getRepr(globalId), {
+                    defaultData: () => new Map(),
+                    serializer: charSerializer,
+                });
             }
         },
     );
 }
+
+export const events: ModEvents = {
+    initGame,
+    preTrackerUpdate,
+};

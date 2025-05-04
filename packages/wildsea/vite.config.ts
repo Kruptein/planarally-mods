@@ -8,18 +8,17 @@ export default defineConfig({
     define: {
         "process.env": {},
     },
+    // This is required if you want to include files (e.g. fonts) in no-inline mode
+    base: "./",
     build: {
         minify: false,
         lib: {
             entry: resolve(__dirname, "src/main.ts"),
-            name: "SimpleCharSheet",
+            name: "Wildsea",
             fileName: "index",
             formats: ["es"],
         },
         rollupOptions: {
-            // This is important, we want to avoid bundling vue with the mod itself.
-            // PA exposes Vue globally so it would just be a waste of space
-            // but it also simply wouldn't work as the two Vue instances would be separate.
             external: ["vue"],
             output: {
                 globals: { vue: "Vue" },

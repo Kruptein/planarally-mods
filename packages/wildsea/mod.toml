@@ -1,0 +1,13 @@
+[mod]
+apiSchema = "0.1.0"
+tag = "wildsea"
+name = "Wildsea"
+version = "0.1.0"
+author = "PlanarAlly"
+shortDescription = "Wildsea RPG integration"
+
+description = """
+This mod integrates the Wildsea RPG system into PlanarAlly.
+
+It currently only adds Ship character sheets, but more is to come.
+"""
