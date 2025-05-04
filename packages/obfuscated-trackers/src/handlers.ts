@@ -1,9 +1,8 @@
-import type { Tracker } from "@planarally/mod-api";
-
-import { loadedDataBlocks } from "./data";
+import type { LocalId, Sync, Tracker } from "@planarally/mod-api";
+import { getDataBlock } from "./data";
 
 // This function will be called by PA everytime a tracker receives an update
-// This happens because we're exporting this function in `main.ts` so that it is visible to PA
+// This function is visible to PA through the exported events object in `main.ts`
 //
 // Our mod will do something particular to relevant trackers:
 // We will hide the real HP by tracking it in a datablock
@@ -11,13 +10,17 @@ import { loadedDataBlocks } from "./data";
 // this could be interesting to give some info to players without giving all the info
 // Additionally we're changing the colour of the tracker to become red if the HP drops below 50%
 export function preTrackerUpdate(
-    id: number,
+    id: LocalId,
     tracker: Tracker,
     delta: Partial<Tracker>,
+    syncTo: Sync,
 ): Partial<Tracker> {
-    // Our mod is only interested in changes to the actual tracker value
-    if (delta.value !== undefined) {
-        const dataBlock = loadedDataBlocks.get(id);
+    // Our mod is only interested in changes to the actual tracker value or max value
+    // and changes that are to be synced to the server
+    // in other words, if the update comes from the server, we're not going to interact with it
+    // otherwise this could lead to two clients looping endlessly responding to each other
+    if (syncTo.server && (delta.value !== undefined || delta.maxvalue !== undefined)) {
+        const dataBlock = getDataBlock(id);
         if (dataBlock) {
             // We need to make sure that if someone sets the tracker directly
             // Our internal `realValue` is also updated, or our tracker and dataBlock will be out of sync
@@ -27,17 +30,22 @@ export function preTrackerUpdate(
             //   It's possible that another mod down the chain modifies the HP of this tracker even further for some reason.
             //   Our dataBlock would then still be out of sync despite our best efforts here.
             //   These inter-mod intricacies are out of the scope of this example
-            const trackerDb = dataBlock.get("trackers").value.get(tracker.uuid);
+            const trackerDb = dataBlock.data.get(tracker.uuid);
             // Only trackers that actually have obfuscation enabled are interesting to us.
             if (trackerDb?.useObfuscation) {
-                trackerDb.realValue = delta.value;
+                if (delta.value !== undefined) {
+                    trackerDb.realValue = delta.value;
+                }
+                if (delta.maxvalue !== undefined) {
+                    trackerDb.realMaxValue = delta.maxvalue;
+                }
+                dataBlock.sync();
 
                 // As explained at the top, we want to modify the HP tracker to be split in X parts (X configurable)
                 // And only show the part that the real HP value is currently in
-                const part = tracker.maxvalue / trackerDb.parts;
-                delta.value = Math.round(part * Math.ceil(delta.value / part));
-                // Lastly we update the color to be green or red depending on the percentage HP
-                delta.primaryColor = delta.value / tracker.maxvalue > 0.5 ? "green" : "red";
+                const part = trackerDb.realMaxValue / trackerDb.parts;
+                delta.value = Math.ceil(trackerDb.realValue / part);
+                delta.maxvalue = trackerDb.parts;
             }
         }
     }

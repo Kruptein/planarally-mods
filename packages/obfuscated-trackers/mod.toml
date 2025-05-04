@@ -1,0 +1,11 @@
+[mod]
+apiSchema = "0.1.0"
+tag = "obfuscated-trackers"
+name = "Obfuscated Trackers"
+version = "0.1.0"
+author = "PlanarAlly"
+shortDescription = "A mod that obfuscates tracker values."
+
+description = """
+This mod allows the obfuscation of tracker values by instead showing rough estimates.
+"""
