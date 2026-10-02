@@ -1,9 +1,9 @@
 import type { GameApi, ModEvents } from "@planarally/mod-api";
-
-import TrackerSettings from "./TrackerSettings.vue";
-import { preTrackerUpdate } from "./handlers";
 import { watch } from "vue";
+
 import { charSerializer, getRepr } from "./data";
+import TrackerSettings from "./TrackerSettings.vue";
+import { preTrackerUpdate, postTrackerUpdate } from "./updates.ts";
 
 // The simple-character-sheet mod has extensive comments for most functions,
 // those won't be repeated here, only things that are new or different will be explained.
@@ -12,6 +12,11 @@ export let api: GameApi;
 
 async function initGame(gameApi: GameApi): Promise<void> {
     api = gameApi;
+
+    // @ts-expect-error - Hooks are not preoperly typed yet
+    api.hooks.tap("pre:tracker:update", preTrackerUpdate);
+    // @ts-expect-error - Events are not preoperly typed yet
+    api.eventBus.on("tracker:updated", postTrackerUpdate);
 
     api.ui.shape.registerTab(
         {
@@ -45,5 +50,4 @@ async function initGame(gameApi: GameApi): Promise<void> {
 
 export const events: ModEvents = {
     initGame,
-    preTrackerUpdate,
 };

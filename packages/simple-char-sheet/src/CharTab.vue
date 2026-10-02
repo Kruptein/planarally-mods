@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 
-import { api } from "./main";
 import { type CharData, type StatType } from "./data";
+import { api } from "./main";
 
 // This is a Vue component that is rendered as a tab in the Shape Edit dialog.
 // Our mod uses this to configure a mini character sheet for characters
 
 // PA uses Vue as its main UI/reactivity provider and thus also provides mods with the capability to
 // provide UI elements in the form of Vue components.
-// Vue and reactivity are generally outside the scope of the annotated comments
+// Vue and reactivity concepts are generally outside the scope of the annotated comments and should be looked into separately.
 
 // PA offers a hook that handles a lot of the boilerplate for interacting with data blocks in a reactive context.
 // (It's strongly recommended to first read the `data.ts` file to understand how datablocks work)
 // It outputs:
 // - `data`: A vue ref containing the data of the block, it's kept up to date when other clients update the data block.
-//           You can mutate the inner data of the ref freely, and it will update the data block automatically.
+//           You can mutate the inner data of the ref freely, and it will update the data block automatically. (note that it does NOT sync to the server automatically)
 //           You can however NOT directly mutate the root ref itself, this causes desyncs between internal state and should instead be handled by the `write` function.
 // - `load`: A function that expects a shape ID and will load the data block for that shape in the `data` ref.
 // - `save`: Save the current datablock to the server. If you mutate the data, but never save it, changes will be lost on reload or external changes!
@@ -32,7 +32,8 @@ const { data, load, save, write } = api.useShapeDataBlock(
     { defaultData: () => [] as CharData },
 );
 
-// Next up, we need to populate the ref with the data of the current character
+// Next we watch for changes to the active character,
+// if a new character is selected, we load the shape data block using our distilled load function.
 watch(
     () => api.systemsState.characters.reactive.activeCharacterId,
     async (charId) => {
@@ -47,7 +48,7 @@ watch(
     // We need to set the `immediate` flag, as the code in this component is only executed once the component is loaded.
     // A watcher is lazy by default, which means that the above code will only execute once the watch condition changes
     // In which case we would miss the case where we just mounted the component with a character already selected.
-    // We could handle this with a separate `onMounted`, but we're just duplicating code at that point, so `immediate` it is!
+    // We could handle this with a separate `onMounted`, but we're just duplicating code at that point.
     { immediate: true },
 );
 

@@ -11,7 +11,7 @@ I have also added information on potential pitfalls or things that you should pa
 ## What does the mod do?
 
 This sample mod adds a new tab to the Shape Edit dialog, but only for shapes that have been configured as characters.
-This new tab acts as a very rudimentary character sheet, you can add a stat which has a name and some type (text / number / checkbox).
+This new tab acts as a very rudimentary character sheet, you can add a stat which has a name and some type (text / number / checkbox). [^1]
 
 The first aspect of the mod is to showcase how a mod can store data on the server, in this case our mini character sheet.
 
@@ -22,3 +22,5 @@ I recommend you to check the files in this order:
 - main.ts: Mod initialization
 - data.ts: Information on datablocks
 - CharTab.vue: Rendering some custom data
+
+[^1]: Since the original creation of this mod, PA introduced a concept called "custom data" which is a more flexible / worked out version of this, so treat this mostly as a mod introduction rather than something to actually use.

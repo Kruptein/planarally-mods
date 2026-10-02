@@ -41,7 +41,7 @@ async function initGame(gameApi: GameApi): Promise<void> {
     // We're adding a new tab to the Shape UI, so we have to register this UI component
     // For the purposes of this example,
     // we're limiting this to only shapes that are related to a character (the PA concept).
-    // To limit the conditions under which a shape tab appears, a third tab can be provided which is a filter function.
+    // This highlights the option to show tabs conditionally, by using the optional filter function.
     //
     // This filter can be a pure function or a computed function (this is a Vue concept)
     // If it's a pure function it will be called when the shape UI is opened for a different shape,

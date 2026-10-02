@@ -1,7 +1,3 @@
-// import type { DataBlock, LocalId } from "@planarally/mod-api";
-// import { shallowReactive } from "vue";
-// import { api } from "../main";
-
 export type ShipData = {
     version: 1;
     cargo: string;
@@ -65,20 +61,3 @@ export const defaultShipData: ShipData = {
     stakesUsed: 0,
     undercrew: [],
 };
-
-// export const shipDataBlocks = shallowReactive(new WeakMap<LocalId, DataBlock<ShipData>>());
-
-// export async function loadShipData(shapeId: LocalId): Promise<DataBlock<ShipData> | undefined> {
-//     if (shipDataBlocks.has(shapeId)) return shipDataBlocks.get(shapeId);
-//     const globalId = api.getGlobalId(shapeId);
-//     if (globalId === undefined) return;
-//     const db = await api.getOrLoadDataBlock(
-//         { category: "shape", name: "data", shape: globalId },
-//         {
-//             createOnServer: false,
-//             defaultData: () => defaultShipData,
-//         },
-//     );
-//     if (db) shipDataBlocks.set(shapeId, db);
-//     return db;
-// }

@@ -32,14 +32,14 @@
 // This is a Vue concept, and basically allows someone to react to changes in the data without registering callbacks.
 // The reactivity of a datablock is entirely opt-in, it's available under the `reactiveData` property,
 // which will only start tracking the data reactively once you access it.
-// Do note that the `useDataBlock` hook will use this automatically. (this will be used in the `CharTab.vue` component)
+// Do note that the `useShapeDataBlock` hook will use this automatically. (this will be used in the `CharTab.vue` component)
 // Another warning is that if you do use the reactiveData property,
 // you should be aware that mutation of the data should (almost) always happen on the reactiveData property and not on the `data` property.
 // This is because reactiveData is a proxy around the actual data, and will not detect the changes made to the data directly.
 
 // All that aside, let's define the data structure we'll be storing in the DataBlock.
-// we're not actually loading any datablocks directly ourselves, we could do this if we needed it in multiple locations in our mod,
-// but right now we only need it in once place (in the char sheet tab).
+// We only need the data in the character sheet tab, so the actual loading/saving of the datablock is deferred to the component itself,
+// we just define the data structure here.
 
 interface Stat<T extends string, V> {
     name: string;
