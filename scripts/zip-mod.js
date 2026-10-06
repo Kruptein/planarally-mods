@@ -2,7 +2,7 @@ import { createWriteStream, existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import archiver from 'archiver';
+import { ZipArchive } from 'archiver';
 
 const packageName = process.argv[2];
 
@@ -40,7 +40,7 @@ console.log(`Creating zip for ${packageName}...`);
 
 // Create a file to stream archive data to
 const output = createWriteStream(outputZip);
-const archive = archiver('zip', {
+const archive = new ZipArchive({
     zlib: { level: 9 } // Sets the compression level
 });
 
