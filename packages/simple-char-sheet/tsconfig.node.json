@@ -3,8 +3,7 @@
     "include": ["vite.config.*"],
     "compilerOptions": {
         "composite": true,
-        "module": "ESNext",
-        "types": ["node"],
-        "moduleResolution": "node"
+        "module": "nodenext",
+        "types": ["node"]
     }
 }

@@ -23,10 +23,7 @@ function setTrackValue(value: number) {
         <div class="track">
             <div class="track-item" v-for="trackItem in trackLength" :key="trackItem">
                 <div class="track-item-outer" @click="setTrackValue(trackItem)">
-                    <div
-                        class="track-item-inner"
-                        :class="{ completed: trackItem <= trackValue }"
-                    ></div>
+                    <div class="track-item-inner" :class="{ completed: trackItem <= trackValue }"></div>
                 </div>
             </div>
         </div>

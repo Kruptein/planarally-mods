@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
-import { api } from "./main";
-import { charSerializer, type Data, type TrackerData } from "./data";
 import type { LocalId, TrackerId } from "@planarally/mod-api";
+import { computed, watch } from "vue";
+
+import { charSerializer, type Data, type TrackerData } from "./data";
+import { api } from "./main";
 
 const { data, load } = api.useShapeDataBlock("obfuscated-trackers", {
     defaultData: (): Data => new Map(),

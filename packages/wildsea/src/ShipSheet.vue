@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import type { ComputedRef } from "vue";
 import { useTemplateRef, watch, watchEffect } from "vue";
-import ShortTrack from "./ShortTrack.vue";
+
 import { defaultShipData } from "./data/ship";
 import { api } from "./main";
+import ShortTrack from "./ShortTrack.vue";
 
+// Keep a reference to the actual character sheet UI element
 const tabPanel = useTemplateRef("tab-panel");
 
+// PA informs the tab component whether it is currently selected or not using the tabSelected prop
 const props = defineProps<{ tabSelected: ComputedRef<boolean> }>();
 
-// When the tab is opened, center it on the screen as it is a big UI element
-// and we almost always want to see most of it at once.
+// This is a very big UI component, so we're going to center it on the screen every time the tab is opened
 watchEffect(() => {
     if (props.tabSelected.value) {
         const container = tabPanel.value?.closest<HTMLElement>(".modal-container");
@@ -23,12 +25,13 @@ watchEffect(() => {
     }
 });
 
-const {
-    data: stats,
-    load,
-    save,
-} = api.useShapeDataBlock("data", { defaultData: () => defaultShipData });
+// Setup the shape datablock hook, this will be used to interact with the datablock for the active shape in a flexible manner.
+// This line in itself does not load any data, but sets up the necessary functions to do so.
+const { data: stats, load, save } = api.useShapeDataBlock("data", { defaultData: () => defaultShipData });
 
+// Actually load the data when the shape is selected
+// As this tab is only loaded for shapes with a ship, it will only run for relevant shapes.
+// Note that this does not mean that the shape datablock actually exists yet, it could be a new ship just added.
 watch(
     () => api.systemsState.selected.reactive.focus,
     async (shapeId) => {
@@ -36,6 +39,11 @@ watch(
     },
     { immediate: true },
 );
+
+// The rest of this component is just HTML and CSS with some small JS for inputs.
+// We essentially call the save function from our datablock hook whenever the input changes.
+// Because all our UI inputs are connected with a `v-model`, the data of the shape block is automatically mutated,
+// which is the reason why our save call actually causes a change to be synced to the server.
 </script>
 
 <template>
@@ -213,18 +221,8 @@ $backgroundColor: #fff;
             padding: math.div($fontSize, 3) $xPadding;
             background-attachment: local;
             background-image:
-                linear-gradient(
-                    to right,
-                    $backgroundColor,
-                    $backgroundColor $xPadding,
-                    transparent $xPadding
-                ),
-                linear-gradient(
-                    to left,
-                    $backgroundColor,
-                    $backgroundColor $xPadding,
-                    transparent $xPadding
-                ),
+                linear-gradient(to right, $backgroundColor, $backgroundColor $xPadding, transparent $xPadding),
+                linear-gradient(to left, $backgroundColor, $backgroundColor $xPadding, transparent $xPadding),
                 repeating-linear-gradient(
                     $backgroundColor,
                     $backgroundColor $fontSize * 2-$lineWidth,

@@ -26,7 +26,7 @@ This new shape tab also shows the real value and max value for the tracker allow
 
 We however also allow the modification of the tracker through the regular tracker and selection info channels. [^1]
 
-All changes to trackers are routed through the `preTrackerUpdate` handler in `handlers.ts`.
+All changes to trackers are routed through a hook in `hooks.ts`.
 This will receive the new values for the tracker, so this is the place where we need to run the obfuscation as well as updating the dataBlock with the real data.
 
 [^1]: The relative mode of the selection info does not work with this mod.

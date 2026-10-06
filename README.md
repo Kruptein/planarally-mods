@@ -18,7 +18,6 @@ To build all the mods:
 
 ```zsh
 pnpm install
-pnpm -r build-api
 pnpm -r build
 ```
 
@@ -42,6 +41,27 @@ This will output a `.pam` file in the package's `dist-zip` folder, that can be i
 
 Note that this does **not** build the package.
 
+## Developing against a local server
+
+PlanarAlly can serve an unpacked mod and reload connected clients when its files change. In the server config (`server/data/config.toml`):
+
+```toml
+[mods]
+dev_directories = ["../../planarally-mods/packages"]
+```
+
+Paths are relative to the `server/` directory. A folder counts as a mod when it contains `mod.toml` and either `index.js` or `dist/index.js`. Pointing `dev_directories` at `packages/` picks up every example mod.
+
+Rebuild on save with:
+
+```zsh
+pnpm watch
+```
+
+Restart the PlanarAlly server after changing `dev_directories`. File changes after that are picked up on their own. The DM mod settings also have a "Reload dev mods" button.
+
+`@planarally/mod-api` re-exports the types from the PlanarAlly repo (`mod-api/`). Those types are the host contract, including `events.dispose`.
+
 ## Packages/Mods
 
 ### 1. Mostly educational
@@ -55,7 +75,7 @@ These will be heavily commented to explain why certain decissions are made.
 This mod explores interaction with `DataBlocks`, `Characters` and `Shape Settings`.
 
 It is meant as a very system-agnostic and simple character sheet.
-It looks ugly, but that's fine. It's main purpose is to track data.
+It looks ugly, but that's fine. It's main purpose is to track data and be an educational tool.
 
 _It should eventually also show interaction with the dice API when that gets implemented in the main codebase as well as showing quick-actions for characters, which also does not yet exist._
 
@@ -78,11 +98,3 @@ They are **NOT** an official product of the (potentially) related company.
 This mod aims to provide basic support for the Wildsea RPG system (See the [MythWorks website](https://www.myth.works/collections/the-wildsea-homepage) for more info about the Wildsea).
 
 It currently adds a ship character sheet mimicking the layout of the official sheet.
-
-### 3. API
-
-_The fate of this package is still a bit undecided. A proper official api package doesn't exist yet as the mod api is still in very early stages._
-
-This package contains a bunch of types that the other packages rely on.
-Do note that this is not a full collection of all types/interfaces that the PA API actually exposes,
-but rather a collection of types that the other mods currently use.

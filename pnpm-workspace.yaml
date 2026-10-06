@@ -1,2 +1,9 @@
 packages:
     - packages/*
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+minimumReleaseAgeExclude:
+    - '@vue/language-core@3.3.12'
+    - vue-tsc@3.3.12
+    - '@planarally/mod-api@0.1.0 || 0.1.1'

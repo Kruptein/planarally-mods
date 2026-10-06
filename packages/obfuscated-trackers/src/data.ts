@@ -1,11 +1,5 @@
-import type {
-    DataBlock,
-    DataBlockSerializer,
-    GlobalId,
-    LocalId,
-    ModRepr,
-    TrackerId,
-} from "@planarally/mod-api";
+import type { DataBlock, DataBlockSerializer, GlobalId, LocalId, ModRepr, TrackerId } from "@planarally/mod-api";
+
 import { api } from "./main";
 
 export interface TrackerData {
@@ -29,6 +23,8 @@ export function getRepr(shapeId: GlobalId): ModRepr {
     return { category: "shape", shape: shapeId, name: "obfuscated-trackers" };
 }
 
+// In the simple-char-sheet mod we used useShapeDataBlock to load the data block,
+// we could use that here as well, but for the sake of example we're going to do the manual work here.
 export function getDataBlock(shapeId: LocalId): DataBlock<SerializedData, Data> | undefined {
     const globalId = api.getGlobalId(shapeId);
     if (globalId === undefined) return undefined;

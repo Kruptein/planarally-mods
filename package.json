@@ -4,15 +4,20 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "zip": "node scripts/zip-mod.js"
+        "zip": "node scripts/zip-mod.js",
+        "watch": "pnpm --parallel --filter @planarally/simple-char-sheet --filter @planarally/system-wildsea --filter @planarally/obfuscated-trackers exec vite build --watch"
     },
     "keywords": [],
     "author": "Darragh <info@darragh.dev>",
     "license": "MIT",
     "type": "module",
     "devDependencies": {
-        "@tsconfig/node22": "^22.0.1",
-        "typescript": "^5.8.2",
-        "archiver": "^6.0.1"
+        "@tsconfig/node24": "^24.0.5",
+        "@types/node": "^24.0.5",
+        "archiver": "^8.0.0",
+        "oxfmt": "^0.72.0",
+        "oxlint": "^1.87.0",
+        "oxlint-tsgolint": "^7.0.2003",
+        "typescript": "^6.0.3"
     }
 }
