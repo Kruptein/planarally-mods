@@ -1,0 +1,23 @@
+[mod]
+apiSchema = "0.1.0"
+tag = "srd-5-1"
+name = "SRD 5.1"
+version = "0.1.0"
+author = "PlanarAlly"
+shortDescription = "5E compatible reference for the SRD 5.1"
+
+description = """
+## Legal
+
+This mod is compatible with fifth edition. It provides System Reference Document 5.1 material for PlanarAlly.
+
+The condition and spell text is adapted from that document. The required attribution is in [LICENSE.md](LICENSE.md).
+
+## What it does
+
+The mod is currently limited to adding entries to the compendium, specifically:
+
+- conditions
+- spells
+
+"""

@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "zip": "node scripts/zip-mod.js",
-        "watch": "pnpm --parallel --filter @planarally/simple-char-sheet --filter @planarally/system-wildsea --filter @planarally/obfuscated-trackers exec vite build --watch"
+        "watch": "pnpm --parallel exec vite build --watch"
     },
     "keywords": [],
     "author": "Darragh <info@darragh.dev>",

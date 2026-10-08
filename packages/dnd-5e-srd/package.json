@@ -1,0 +1,37 @@
+{
+    "name": "@planarally/system-dnd-5e-srd",
+    "version": "0.1.0",
+    "private": true,
+    "files": [
+        "dist"
+    ],
+    "type": "module",
+    "module": "./dist/dnd-5e-srd.js",
+    "exports": {
+        ".": {
+            "import": "./dist/dnd-5e-srd.js"
+        }
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "pnpm run type-check && pnpm run build-only",
+        "preview": "vite preview",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+        "format": "oxfmt",
+        "format:ci": "oxfmt --check",
+        "lint": "oxlint --fix --type-aware",
+        "lint:ci": "oxlint --type-aware --deny-warnings"
+    },
+    "dependencies": {
+        "@planarally/mod-api": "^0.2.0",
+        "vue": "^3.5.43"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.5",
+        "@vitejs/plugin-vue": "^6.0.9",
+        "@vue/tsconfig": "^0.9.1",
+        "vite": "^8.3.2",
+        "vue-tsc": "^3.3.12"
+    }
+}

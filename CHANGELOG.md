@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [2026-10-08]
+
+- Add 5e SRD 5.1 mod
+- Add license to .pam file in zip script
+
 ## [2026-10-06]
 
 - removed the api lib in favour of the new npm package `@planarally/mod-api`
