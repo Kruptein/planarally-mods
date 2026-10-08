@@ -68,6 +68,11 @@ archive.pipe(output);
 // Add mod.toml
 archive.file(modToml, { name: 'mod.toml' });
 
+const license = join(pkgDir, 'LICENSE.md');
+if (existsSync(license)) {
+    archive.file(license, { name: 'LICENSE.md' });
+}
+
 // Add all files from dist directory
 archive.directory(distDir, false);
 
