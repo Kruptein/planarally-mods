@@ -96,6 +96,15 @@ These are mods that actually are intended to be used! They may still be in an un
 Note that official here means they are made by _me_, being the author of PlanarAlly.
 They are **NOT** an official product of the (potentially) related company.
 
+### 5e
+
+There are 2 mods in this repository for the dnd 5e system.
+
+- dnd-5e-srd adds a data system for the dnd 5e system. It's a base for other mods to interact with and doesn't add much value to a user on its own.
+- dnd-5e-char-sheet adds an automated character sheet that interacts with the above mod.
+
+The srd mod is written in such a way that interoperability with other mods is possible, which makes it quite complex to look at, so I don't recommend to look at it as an example of a simple mod.
+
 ### Wildsea
 
 This mod aims to provide basic support for the Wildsea RPG system (See the [MythWorks website](https://www.myth.works/collections/the-wildsea-homepage) for more info about the Wildsea).

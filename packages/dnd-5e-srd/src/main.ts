@@ -1,25 +1,16 @@
 import type { GameApi, ModEvents } from "@planarally/mod-api";
 
-import conditions from "./data/conditions.json";
-import spells from "./data/spells.json";
+import { createCharacterService } from "./character/service.ts";
+import { addCompendiumEntries } from "./compendium.ts";
+import { bindApi } from "./context.ts";
+import type { SrdModApi } from "./types/character.ts";
 
-export let api: GameApi;
+async function initGame(api: GameApi): Promise<void> {
+    bindApi(api);
 
-async function initGame(gameApi: GameApi): Promise<void> {
-    api = gameApi;
+    addCompendiumEntries(api);
 
-    api.compendium.register([...conditions, ...spells], {
-        name: "SRD 5.1",
-        views: [
-            {
-                at: ["Spells"],
-                name: "Level",
-                by: "level",
-                order: ["Cantrip", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"],
-            },
-            { at: ["Spells"], name: "School", by: "school" },
-        ],
-    });
+    api.provideApi({ character: createCharacterService(api) } satisfies SrdModApi);
 }
 
 export const events: ModEvents = {

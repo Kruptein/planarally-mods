@@ -2,7 +2,7 @@
 apiSchema = "0.1.0"
 tag = "srd-5-1"
 name = "SRD 5.1"
-version = "0.1.0"
+version = "0.2.0"
 author = "PlanarAlly"
 shortDescription = "5E compatible reference for the SRD 5.1"
 
@@ -11,13 +11,38 @@ description = """
 
 This mod is compatible with fifth edition. It provides System Reference Document 5.1 material for PlanarAlly.
 
-The condition and spell text is adapted from that document. The required attribution is in [LICENSE.md](LICENSE.md).
+The required attribution is attached at the end.
 
 ## What it does
 
-The mod is currently limited to adding entries to the compendium, specifically:
+The mod adds a variety of info to the compendium:
 
+- abilities
+- backgrounds
+- classes
 - conditions
+- items
+- languages
+- races
+- skills
 - spells
+
+It also adds a typed model for a character stored in DataBlocks and CustomData to offer a consistent schema for inter-mod communication.
+The data stored in CustomData, is data that is useful to use in dice rolls (e.g. skills / saves ...), whereas the data stored in DataBlocks is more cumbersome to store in custom data (e.g. spells, attacks, text descriptions etc.).
+
+Another mod can thus use this data to offer extra things (e.g. a character sheet, an alternate initiative UI, ...)
+By using the schemas defined in this mod, another mod can also add extra compendium entries, which will then be available in other mods as well (a character sheet mod could show a homebrew class from another mod)
+
+## Legal
+
+This mod is compatible with fifth edition.
+
+The compendium data is material from the System Reference Document 5.1, adapted for this mod (Markdown formatting, and links between entries).
+
+This work includes material taken from the System Reference Document 5.1 ("SRD 5.1") by Wizards of the Coast LLC and available at https://dnd.wizards.com/resources/systems-reference-document. The SRD 5.1 is licensed under the Creative Commons Attribution 4.0 International License available at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+Section 5 of that license contains a disclaimer of warranties and a limitation of liability.
+
+The rest of this mod is not taken from the SRD 5.1.
 
 """

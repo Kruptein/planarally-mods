@@ -6,9 +6,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-tsconfig.node.tsbuildinfo
+tsconfig.app.tsbuildinfo
 
 node_modules
+.pnpm-store
 .DS_Store
 dist
 dist-ssr
