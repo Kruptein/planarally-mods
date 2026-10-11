@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "zip": "node scripts/zip-mod.js",
+        "dev": "pnpm --parallel -r dev",
         "watch": "pnpm --parallel exec vite build --watch"
     },
     "keywords": [],
