@@ -52,15 +52,18 @@ dev_directories = ["../../planarally-mods/packages"]
 
 Paths are relative to the `server/` directory. A folder counts as a mod when it contains `mod.toml` and either `index.js` or `dist/index.js`. Pointing `dev_directories` at `packages/` picks up every example mod.
 
-Rebuild on save with:
+Both build as serve mode are supported in this setup.
 
-```zsh
-pnpm watch
-```
+For regular builds you can just use the build or watch commands and have the production build of the mod automatically reloaded.
+
+There are some technical downsides to this that may or may not bother you during development.
+For most UI components for example, you'll have to close the component and re-open it to see the proper new version.
+
+This is where the serve / dev / hmr mode comes into play, using a vite dev server which can be started using the `pnpm dev` command.
+
+Each package listens on a fixed port (5273–5277) and writes `vite-dev.json` next to its `mod.toml` while that server is running. PlanarAlly loads `origin + entry` from that file, and Vue updates an open mod in place. Stop `pnpm dev` and the file is removed.
 
 Restart the PlanarAlly server after changing `dev_directories`. File changes after that are picked up on their own. The DM mod settings also have a "Reload dev mods" button.
-
-`@planarally/mod-api` re-exports the types from the PlanarAlly repo (`mod-api/`). Those types are the host contract, including `events.dispose`.
 
 ## Packages/Mods
 
