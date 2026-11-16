@@ -6,4 +6,4 @@ allowBuilds:
 minimumReleaseAgeExclude:
     - "@vue/language-core@3.3.12"
     - vue-tsc@3.3.12
-    - "@planarally/mod-api@0.4.0"
+    - "@planarally/mod-api@0.4.0 || 0.6.0 || 0.7.0"

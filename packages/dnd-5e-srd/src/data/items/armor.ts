@@ -1,0 +1,93 @@
+import type { CompendiumEntry } from "@planarally/mod-api";
+
+import type { Item } from "../../types/item.ts";
+
+import { armor, gp } from "./helpers.ts";
+
+export const armors: CompendiumEntry<Item>[] = [
+    armor("padded", {
+        name: "Padded",
+        category: "light",
+        cost: gp(5),
+        armorClass: 11,
+        stealthDisadvantage: true,
+        weight: 8,
+    }),
+    armor("leather", { name: "Leather", category: "light", cost: gp(10), armorClass: 11, weight: 10 }),
+    armor("studded-leather", { name: "Studded leather", category: "light", cost: gp(45), armorClass: 12, weight: 13 }),
+    armor("hide", { name: "Hide", category: "medium", cost: gp(10), armorClass: 12, dexterityCap: 2, weight: 12 }),
+    armor("chain-shirt", {
+        name: "Chain shirt",
+        category: "medium",
+        cost: gp(50),
+        armorClass: 13,
+        dexterityCap: 2,
+        weight: 20,
+    }),
+    armor("scale-mail", {
+        name: "Scale mail",
+        category: "medium",
+        cost: gp(50),
+        armorClass: 14,
+        dexterityCap: 2,
+        stealthDisadvantage: true,
+        weight: 45,
+    }),
+    armor("breastplate", {
+        name: "Breastplate",
+        category: "medium",
+        cost: gp(400),
+        armorClass: 14,
+        dexterityCap: 2,
+        weight: 20,
+    }),
+    armor("half-plate", {
+        name: "Half plate",
+        category: "medium",
+        cost: gp(750),
+        armorClass: 15,
+        dexterityCap: 2,
+        stealthDisadvantage: true,
+        weight: 40,
+    }),
+    armor("ring-mail", {
+        name: "Ring mail",
+        category: "heavy",
+        cost: gp(30),
+        armorClass: 14,
+        dexterityCap: 0,
+        stealthDisadvantage: true,
+        weight: 40,
+    }),
+    armor("chain-mail", {
+        name: "Chain mail",
+        category: "heavy",
+        cost: gp(75),
+        armorClass: 16,
+        dexterityCap: 0,
+        strength: 13,
+        stealthDisadvantage: true,
+        weight: 55,
+    }),
+    armor("splint", {
+        name: "Splint",
+        category: "heavy",
+        cost: gp(200),
+        armorClass: 17,
+        dexterityCap: 0,
+        strength: 15,
+        stealthDisadvantage: true,
+        weight: 60,
+    }),
+    armor("plate", {
+        name: "Plate",
+        category: "heavy",
+        cost: gp(1500),
+        armorClass: 18,
+        dexterityCap: 0,
+        strength: 15,
+        stealthDisadvantage: true,
+        weight: 65,
+    }),
+    armor("shield", { name: "Shield", category: "shield", cost: gp(10), armorClass: 2, weight: 6 }),
+];
